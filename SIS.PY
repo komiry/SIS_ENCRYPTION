@@ -85,7 +85,7 @@ class GUI(tk.Tk):
         self.title("Student Information System")
         self.geometry("400x300")
         self.system = StudentSystem()
-        self.configure(bg="black")  # Setting background color to black
+        self.configure(bg="black")  
 
         self.menu_label = tk.Label(self, text="Main Menu", font=("Helvetica", 16), bg="black", fg="white")  # Changing label background to black and text color to white
         self.menu_label.pack(pady=10)
@@ -93,8 +93,8 @@ class GUI(tk.Tk):
         self.encrypt_button = tk.Button(self, text="Encrypt a Record", command=self.encrypt_menu, bg="black", fg="white")  # Changing button background to black and text color to white
         self.encrypt_button.pack(pady=5)
 
-        self.decrypt_button = tk.Button(self, text="Decrypt a Record", command=self.decrypt_menu, bg="black", fg="white")  # Changing button background to black and text color to white
-        self.decrypt_button.pack(pady=5)
+       #self.decrypt_button = tk.Button(self, text="Decrypt a Record", command=self.decrypt_menu, bg="black", fg="white")  # Changing button background to black and text color to white
+        #self.decrypt_button.pack(pady=5)
 
         self.made_by_label = tk.Label(self, text="Made by Ryan", bg="black", fg="white")  # Changing label background to black and text color to white
         self.made_by_label.pack(pady=5)
@@ -110,21 +110,21 @@ class GUI(tk.Tk):
         encrypt_menu = tk.Toplevel(self)
         encrypt_menu.title("Encrypt Menu")
         encrypt_menu.geometry("300x200")
-        encrypt_menu.configure(bg="black")  # Setting background color to black
+        encrypt_menu.configure(bg="black")  
 
-        add_button = tk.Button(encrypt_menu, text="Add Student", command=self.add_student, bg="black", fg="white")  # Changing button background to black and text color to white
+        add_button = tk.Button(encrypt_menu, text="Add Student", command=self.add_student, bg="black", fg="white") 
         add_button.pack(pady=5)
 
-        view_button = tk.Button(encrypt_menu, text="View Students", command=self.view_students, bg="black", fg="white")  # Changing button background to black and text color to white
+        view_button = tk.Button(encrypt_menu, text="View Students", command=self.view_students, bg="black", fg="white")  
         view_button.pack(pady=5)
 
-        update_button = tk.Button(encrypt_menu, text="Update Student", command=self.update_student, bg="black", fg="white")  # Changing button background to black and text color to white
+        update_button = tk.Button(encrypt_menu, text="Update Student", command=self.update_student, bg="black", fg="white")  
         update_button.pack(pady=5)
 
-        delete_button = tk.Button(encrypt_menu, text="Delete Student", command=self.delete_student, bg="black", fg="white")  # Changing button background to black and text color to white
+        delete_button = tk.Button(encrypt_menu, text="Delete Student", command=self.delete_student, bg="black", fg="white")  
         delete_button.pack(pady=5)
 
-        encrypt_button = tk.Button(encrypt_menu, text="Encrypt Student Data", command=self.encrypt_student_data, bg="black", fg="white")  # Changing button background to black and text color to white
+        encrypt_button = tk.Button(encrypt_menu, text="Encrypt Student Data", command=self.encrypt_student_data, bg="black", fg="white")  
         encrypt_button.pack(pady=5)
 
     def add_student(self):
@@ -185,27 +185,28 @@ class GUI(tk.Tk):
         else:
             messagebox.showinfo("Delete Student", f"No student found with ID: {student_id}")
 
-    def encrypt_student_data(self):
-        if not self.system.students:
-            messagebox.showinfo("Encrypt Data", "No students added yet.")
-            return
+  def encrypt_student_data(self):
+    if not self.system.students:
+        messagebox.showinfo("Encrypt Data", "No students added yet.")
+        return
 
-        password = simpledialog.askstring("Set Password", "Set Encryption Password:")
-        if not password:
-            messagebox.showerror("Error", "Password cannot be empty.")
-            return
+    password = simpledialog.askstring("Set Password", "Set Encryption Password:")
+    if not password:
+        messagebox.showerror("Error", "Password cannot be empty.")
+        return
 
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
-        encrypted_students = []
-        for student in self.system.students:
-            encrypted_data = self.encrypt_data(student, hashed_password)
-            encrypted_students.append(encrypted_data)
+    encrypted_students = []
+    for student in self.system.students:
+        encrypted_data = self.encrypt_data(student, hashed_password)
+        encrypted_students.append(encrypted_data)
 
-        with open("studentrec.txt", "w") as file:
-            for encrypted_student in encrypted_students:
-                file.write(encrypted_student + "\n")
-        messagebox.showinfo("Encrypt Data", "Student data encrypted and saved as studentrec.txt")
+    encrypted_file_name = SubstitutionCipher.encrypt("students.txt", hashed_password)  
+    with open(encrypted_file_name, "w") as file:  
+        for encrypted_student in encrypted_students:
+            file.write(encrypted_student + "\n")
+    messagebox.showinfo("Encrypt Data", "Student data encrypted and saved as encrypted file name")
 
     def encrypt_data(self, student, password_hash):
         encrypted_id = SubstitutionCipher.encrypt(student.id, self.key)
@@ -221,21 +222,21 @@ class GUI(tk.Tk):
         decrypt_menu = tk.Toplevel(self)
         decrypt_menu.title("Decrypt Menu")
         decrypt_menu.geometry("300x150")
-        decrypt_menu.configure(bg="black")  # Setting background color to black
+        decrypt_menu.configure(bg="black")  
 
-        file_label = tk.Label(decrypt_menu, text="Enter the TXT file:", bg="black", fg="white")  # Changing label background to black and text color to white
+        file_label = tk.Label(decrypt_menu, text="Enter the TXT file:", bg="black", fg="white")  
         file_label.pack(pady=5)
 
-        self.file_entry = tk.Entry(decrypt_menu, bg="black", fg="white")  # Changing entry background to black and text color to white
+        self.file_entry = tk.Entry(decrypt_menu, bg="black", fg="white")  
         self.file_entry.pack(pady=5)
 
-        password_label = tk.Label(decrypt_menu, text="Enter the Password:", bg="black", fg="white")  # Changing label background to black and text color to white
+        password_label = tk.Label(decrypt_menu, text="Enter the Password:", bg="black", fg="white")
         password_label.pack(pady=5)
 
-        self.password_entry = tk.Entry(decrypt_menu, show="*", bg="black", fg="white")  # Changing entry background to black and text color to white
+        self.password_entry = tk.Entry(decrypt_menu, show="*", bg="black", fg="white")  
         self.password_entry.pack(pady=5)
 
-        decrypt_button = tk.Button(decrypt_menu, text="Decrypt", command=self.decrypt_student_data, bg="black", fg="white")  # Changing button background to black and text color to white
+        decrypt_button = tk.Button(decrypt_menu, text="Decrypt", command=self.decrypt_student_data, bg="black", fg="white")  
         decrypt_button.pack(pady=5)
 
     def decrypt_student_data(self):
